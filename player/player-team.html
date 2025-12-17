@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Player – Team Info | EduSportPro</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Configuration with Custom Brand Colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            hope: {
+              lime: '#8DC63F',   // h
+              cyan: '#00AEEF',   // o
+              red: '#ED1C24',    // p
+              yellow: '#FDC116', // e
+              dark: '#1D1D1B',   // Tagline
+              light: '#f2f4f7',  // Background
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f2f4f7;
+      color: #1D1D1B;
+      overflow-x: hidden;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ccc; 
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00AEEF; /* Cyan thumb */
+    }
+
+    /* Glass Backdrop for Mobile Menu */
+    .glass-backdrop {
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+
+<body class="antialiased h-screen flex flex-col">
+
+  <!-- ========================= -->
+  <!-- TOP NAVBAR -->
+  <!-- ========================= -->
+  <nav class="bg-white w-full shadow-sm border-b border-gray-200 flex items-center justify-between px-4 md:px-6 py-3 shrink-0 z-50">
+    <div class="flex items-center gap-3">
+       <!-- Mobile Menu Button -->
+       <button onclick="toggleSidebar()" class="md:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-hope-cyan">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+
+      <!-- Logo Icon -->
+      <div class="w-8 h-8 md:w-10 md:h-10 bg-hope-lime rounded-lg flex items-center justify-center text-white font-bold text-lg md:text-xl shadow-sm shrink-0">
+        E
+      </div>
+      <!-- Brand Name -->
+      <div class="text-lg md:text-xl font-bold tracking-tight hidden sm:block">
+        <span class="text-hope-lime">Edu</span><span class="text-hope-cyan">Sport</span><span class="text-hope-red">Pro</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 md:gap-6">
+      
+      <!-- Notification Bell -->
+      <a href="/player/player-notifications.html" class="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-hope-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        <span class="absolute top-1 right-1 bg-hope-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">3</span>
+      </a>
+
+      <select class="bg-gray-50 border border-gray-200 text-hope-dark text-sm rounded-lg focus:ring-hope-cyan focus:border-hope-cyan block px-2 py-1.5 md:px-3 outline-none">
+        <option>EN</option>
+        <option>KM</option>
+      </select>
+
+      <a href="/player/player-profile.html" class="flex items-center gap-2 md:gap-3 cursor-pointer pl-2 md:pl-4 border-l border-gray-200 hover:bg-gray-50 transition-colors rounded-r-lg p-1">
+        <div class="text-right hidden md:block">
+          <div class="text-sm font-semibold text-hope-dark">Player Dara</div>
+          <div class="text-xs text-gray-500">Defender - Team A</div>
+        </div>
+        <div class="w-8 h-8 md:w-9 md:h-9 bg-hope-yellow rounded-full flex items-center justify-center text-white font-bold border-2 border-white shadow-sm shrink-0">
+          PD
+        </div>
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- ========================= -->
+  <!-- LAYOUT WRAPPER -->
+  <!-- ========================= -->
+  <div class="flex h-[calc(100vh-64px)] overflow-hidden relative">
+
+    <!-- Backdrop for Mobile Sidebar -->
+    <div id="sidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 z-[55] hidden transition-opacity opacity-0 md:hidden glass-backdrop"></div>
+
+    <!-- ========================= -->
+    <!-- SIDEBAR (FIXED) -->
+    <!-- ========================= -->
+    <aside id="sidebar" class="w-64 bg-white shadow-xl md:shadow-md flex-shrink-0 z-[60] fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 md:translate-x-0 md:static md:z-auto h-full">
+      <div class="p-5 h-full overflow-y-auto relative">
+        <!-- Close Button (Mobile Only) -->
+        <button onclick="toggleSidebar()" class="absolute top-4 right-4 md:hidden text-gray-400 hover:text-hope-red transition-colors p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Player Menu</h2>
+        <nav class="space-y-1">
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/player/player-dashboard.html">
+            <svg class="w-5 h-5 group-hover:text-hope-cyan transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            Dashboard
+          </a>
+          
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/player/player-information.html">
+             <svg class="w-5 h-5 group-hover:text-hope-lime transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            Player Info
+          </a>
+
+          <!-- Active State: Team Info -->
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg bg-gray-100 text-hope-dark font-semibold group" href="/player/player-team.html">
+            <svg class="w-5 h-5 text-hope-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            Team Info
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/player/player-match-schedule.html">
+             <svg class="w-5 h-5 group-hover:text-hope-yellow transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Match Schedule
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/player/player-performance.html">
+            <svg class="w-5 h-5 group-hover:text-hope-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+            Performance
+          </a>
+
+        </nav>
+      </div>
+    </aside>
+
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT (SCROLLABLE) -->
+    <!-- ========================= -->
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto w-full">
+
+      <!-- HEADER -->
+      <div class="mb-6 md:mb-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-hope-dark">Team Information</h1>
+        <p class="text-gray-500 mt-1 text-sm md:text-base">View details about your team, coach, and squad members.</p>
+      </div>
+
+
+      <!-- TEAM OVERVIEW & COACH CARD -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 md:mb-10">
+          
+          <!-- Team Stats -->
+          <div class="lg:col-span-2 bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 relative overflow-hidden">
+             <div class="absolute top-0 right-0 w-32 h-32 bg-hope-cyan/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+             
+             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 relative z-10">
+                <div class="flex items-center gap-4">
+                   <div class="w-14 h-14 md:w-16 md:h-16 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center text-xl md:text-2xl font-bold text-hope-dark flex-shrink-0">
+                      TA
+                   </div>
+                   <div>
+                      <h2 class="text-xl md:text-2xl font-bold text-hope-dark">Team A</h2>
+                      <p class="text-gray-500 text-sm">Main Squad</p>
+                   </div>
+                </div>
+                <div class="mt-4 md:mt-0 bg-white px-4 py-2 rounded-lg border border-gray-100 shadow-sm self-stretch flex items-center justify-center">
+                  <div>
+                    <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider block">Next Match</span>
+                    <div class="font-bold text-hope-dark flex items-center gap-2">
+                       <svg class="w-4 h-4 text-hope-red" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                       <span class="text-sm">Dec 20, 2025</span>
+                    </div>
+                  </div>
+                </div>
+             </div>
+
+             <div class="grid grid-cols-2 gap-4 relative z-10">
+                <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                   <p class="text-gray-500 text-xs uppercase tracking-wider font-semibold">Total Players</p>
+                   <h3 class="text-2xl font-bold text-gray-900">22</h3>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                   <p class="text-gray-500 text-xs uppercase tracking-wider font-semibold">League Position</p>
+                   <h3 class="text-2xl font-bold text-hope-cyan">3rd</h3>
+                </div>
+             </div>
+          </div>
+
+          <!-- Coach Card -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col items-center text-center justify-center relative overflow-hidden">
+              <div class="absolute top-0 w-full h-1 bg-hope-lime"></div>
+              <div class="w-20 h-20 bg-gray-100 rounded-full mb-4 overflow-hidden border-2 border-white shadow-md">
+                 <div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 font-bold text-xl">MV</div>
+              </div>
+              <h3 class="text-xl font-bold text-hope-dark">Mr. Vuthy</h3>
+              <p class="text-gray-500 font-medium text-sm mb-4">Head Coach</p>
+              <div class="bg-gray-50 px-4 py-1.5 rounded-full border border-gray-100 text-xs font-semibold text-gray-600">
+                 8 Years Experience
+              </div>
+              <button class="mt-6 text-hope-cyan text-sm font-semibold hover:underline">View Coach Profile</button>
+          </div>
+
+      </div>
+
+
+      <!-- TEAM PLAYERS GRID -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 mb-10">
+        <div class="flex justify-between items-center mb-6">
+           <h2 class="text-xl font-bold text-hope-dark">Squad List</h2>
+           <span class="text-xs bg-gray-100 text-gray-500 px-3 py-1 rounded-full font-medium">22 Players</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+
+          <!-- Player 1 (You) -->
+          <div class="group relative bg-white border border-hope-cyan/30 rounded-xl p-4 hover:shadow-md transition-shadow">
+             <div class="absolute top-3 right-3">
+               <span class="bg-hope-cyan text-white text-[10px] font-bold px-2 py-0.5 rounded-full">YOU</span>
+             </div>
+             <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-hope-cyan rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">DC</div>
+                <div>
+                   <h3 class="font-bold text-gray-900 group-hover:text-hope-cyan transition-colors">Dara Chan</h3>
+                   <p class="text-xs text-gray-500">Defender</p>
+                </div>
+             </div>
+             <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
+                <span class="text-xs font-mono text-gray-400">#4</span>
+                <span class="text-xs font-semibold text-green-600">Active</span>
+             </div>
+          </div>
+
+          <!-- Player 2 -->
+          <div class="group bg-white border border-gray-100 rounded-xl p-4 hover:shadow-md hover:border-gray-200 transition-all">
+             <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">RS</div>
+                <div>
+                   <h3 class="font-bold text-gray-900 group-hover:text-hope-dark transition-colors">Rina Seng</h3>
+                   <p class="text-xs text-gray-500">Forward</p>
+                </div>
+             </div>
+             <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
+                <span class="text-xs font-mono text-gray-400">#9</span>
+                <span class="text-xs font-semibold text-green-600">Active</span>
+             </div>
+          </div>
+
+          <!-- Player 3 -->
+          <div class="group bg-white border border-gray-100 rounded-xl p-4 hover:shadow-md hover:border-gray-200 transition-all">
+             <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">SR</div>
+                <div>
+                   <h3 class="font-bold text-gray-900 group-hover:text-hope-dark transition-colors">Sok Rith</h3>
+                   <p class="text-xs text-gray-500">Midfielder</p>
+                </div>
+             </div>
+             <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
+                <span class="text-xs font-mono text-gray-400">#6</span>
+                <span class="text-xs font-semibold text-green-600">Active</span>
+             </div>
+          </div>
+
+          <!-- Player 4 -->
+          <div class="group bg-white border border-gray-100 rounded-xl p-4 hover:shadow-md hover:border-gray-200 transition-all">
+             <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">CD</div>
+                <div>
+                   <h3 class="font-bold text-gray-900 group-hover:text-hope-dark transition-colors">Chan Dara</h3>
+                   <p class="text-xs text-gray-500">Defender</p>
+                </div>
+             </div>
+             <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
+                <span class="text-xs font-mono text-gray-400">#5</span>
+                <span class="text-xs font-semibold text-yellow-500">Injured</span>
+             </div>
+          </div>
+
+          <!-- Player 5 -->
+          <div class="group bg-white border border-gray-100 rounded-xl p-4 hover:shadow-md hover:border-gray-200 transition-all">
+             <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">VL</div>
+                <div>
+                   <h3 class="font-bold text-gray-900 group-hover:text-hope-dark transition-colors">Vuthy Lim</h3>
+                   <p class="text-xs text-gray-500">Goalkeeper</p>
+                </div>
+             </div>
+             <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
+                <span class="text-xs font-mono text-gray-400">#1</span>
+                <span class="text-xs font-semibold text-green-600">Active</span>
+             </div>
+          </div>
+
+          <!-- Player 6 -->
+          <div class="group bg-white border border-gray-100 rounded-xl p-4 hover:shadow-md hover:border-gray-200 transition-all">
+             <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">KP</div>
+                <div>
+                   <h3 class="font-bold text-gray-900 group-hover:text-hope-dark transition-colors">Kosal Pheak</h3>
+                   <p class="text-xs text-gray-500">Forward</p>
+                </div>
+             </div>
+             <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
+                <span class="text-xs font-mono text-gray-400">#11</span>
+                <span class="text-xs font-semibold text-green-600">Active</span>
+             </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      const body = document.body;
+      
+      if (sidebar.classList.contains('-translate-x-full')) {
+        // Open Sidebar
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+        setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+        body.style.overflow = 'hidden'; 
+      } else {
+        // Close Sidebar
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('opacity-0');
+        setTimeout(() => backdrop.classList.add('hidden'), 300); 
+        body.style.overflow = 'auto';
+      }
+    }
+  </script>
+
+</body>
+
+</html>

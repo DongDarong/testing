@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Details | EduSportPro</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Configuration with Custom Brand Colors (FIXED: Wrapped in IIFE with check) -->
+  <script>
+    (function () {
+      if (typeof tailwind !== 'undefined') {
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: { sans: ['Inter', 'sans-serif'] },
+              colors: {
+                hope: {
+                  lime: '#8DC63F',
+                  cyan: '#00AEEF',
+                  red: '#ED1C24',
+                  yellow: '#FDC116',
+                  dark: '#1D1D1B',
+                  light: '#f2f4f7'
+                }
+              }
+            }
+          }
+        }
+      }
+    })();
+  </script>
+
+  <style>
+    body {
+      background-color: #f2f4f7;
+      color: #1D1D1B;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ccc; 
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00AEEF;
+    }
+  </style>
+</head>
+
+<body class="antialiased flex flex-col">
+
+<!-- ================= HEADER ================= -->
+<div class="bg-white shadow-lg border-b border-gray-100 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between sticky top-0 z-10">
+  <div>
+    <h1 class="text-xl md:text-2xl font-extrabold text-hope-dark">Team A Details</h1>
+    <p class="text-xs md:text-sm text-gray-500">Comprehensive view of team information and roster.</p>
+  </div>
+  <a href="/admin/admin-teams.html"
+     class="bg-hope-dark text-white hover:bg-hope-dark/90 px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-sm font-medium transition-colors shadow-md shadow-hope-dark/20">
+    ← Back to Teams
+  </a>
+</div>
+
+<!-- ================= CONTENT ================= -->
+<div class="p-4 md:p-6 space-y-6 md:space-y-8 max-w-6xl mx-auto w-full">
+
+  <!-- TEAM INFO CARD -->
+  <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 md:p-6 transition-transform hover:shadow-2xl hover:border-hope-cyan/50">
+    
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4 border-b border-gray-100 pb-4 mb-4">
+      <div class="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-hope-lime/20 flex items-center justify-center text-hope-lime text-2xl md:text-3xl font-extrabold flex-shrink-0 border-2 border-hope-lime/50 shadow-inner">
+        A
+      </div>
+      <div class="flex-1">
+        <h2 class="text-2xl font-bold text-hope-dark">Team A (Eagles)</h2>
+        <p class="text-sm text-gray-600">U16 Division</p>
+      </div>
+      <span class="inline-flex items-center mt-2 sm:mt-0 gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold bg-hope-lime/20 text-hope-lime shadow-inner">
+          <span class="w-2 h-2 rounded-full bg-hope-lime"></span>
+          Active
+      </span>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4 md:gap-8 mt-6">
+      
+      <!-- Coach -->
+      <div>
+        <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Coach</p>
+        <p class="font-bold text-hope-dark text-lg">Coach Sok</p>
+      </div>
+      <!-- Total Players -->
+      <div>
+        <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Players</p>
+        <p class="font-bold text-hope-dark text-lg">20 Roster Slots</p>
+      </div>
+      <!-- Division Start Date -->
+      <div>
+        <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Division Start</p>
+        <p class="font-medium text-gray-700 text-base">Sep 1, 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYERS LIST -->
+  <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+    <div class="px-4 md:px-6 py-4 border-b border-gray-100 bg-gray-50">
+      <h3 class="text-lg font-bold text-hope-dark">Current Roster</h3>
+      <p class="text-xs text-gray-500">List of all 20 assigned players.</p>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-100 text-sm">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-4 md:px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">#</th>
+            <th class="px-4 md:px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">Name</th>
+            <th class="px-4 md:px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">Position</th>
+            <th class="px-4 md:px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">Jersey</th>
+            <th class="px-4 md:px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">Profile</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-hope-cyan/5 transition-colors">
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm text-gray-600">1</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm font-bold text-hope-dark">Chan Dara</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm text-gray-700">Forward</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm font-mono font-bold text-hope-cyan">9</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-right">
+                <button class="text-hope-cyan hover:text-sky-600 text-xs font-bold px-2 py-1 rounded">View</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-hope-cyan/5 transition-colors">
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm text-gray-600">2</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm font-bold text-hope-dark">Sok Vannak</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm text-gray-700">Midfielder</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm font-mono font-bold text-hope-cyan">8</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-right">
+                <button class="text-hope-cyan hover:text-sky-600 text-xs font-bold px-2 py-1 rounded">View</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-hope-cyan/5 transition-colors">
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm text-gray-600">3</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm font-bold text-hope-dark">Heng Sophal</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm text-gray-700">Goalkeeper</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-sm font-mono font-bold text-hope-cyan">1</td>
+            <td class="px-4 md:px-6 py-3 whitespace-nowrap text-right">
+                <button class="text-hope-cyan hover:text-sky-600 text-xs font-bold px-2 py-1 rounded">View</button>
+            </td>
+          </tr>
+          <!-- Placeholder for more players -->
+          <tr>
+            <td class="px-4 md:px-6 py-3 text-sm text-gray-400" colspan="5">... 17 more players in the roster.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TRAINING & MATCH SUMMARY -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+
+    <!-- UPCOMING TRAINING -->
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 md:p-6 transition-transform hover:scale-[1.01] hover:border-hope-cyan">
+      <h3 class="text-lg font-bold text-hope-dark mb-4 border-b border-gray-100 pb-3 flex items-center gap-2">
+        <svg class="w-5 h-5 text-hope-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        Upcoming Training
+      </h3>
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+          <span class="text-gray-500 font-medium">Date</span>
+          <span class="font-bold text-hope-dark">15 Oct 2025</span>
+        </div>
+        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+          <span class="text-gray-500 font-medium">Time</span>
+          <span class="font-bold text-hope-cyan text-base">3:00 PM</span>
+        </div>
+        <div class="flex justify-between items-center py-2">
+          <span class="text-gray-500 font-medium">Location</span>
+          <span class="font-medium text-gray-700 text-base">Main Stadium</span>
+        </div>
+        <div class="pt-2 text-right">
+           <button class="text-xs font-semibold text-hope-cyan hover:text-sky-600 px-3 py-1 bg-hope-cyan/10 rounded-full">View Calendar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAST MATCH -->
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 md:p-6 transition-transform hover:scale-[1.01] hover:border-hope-yellow">
+      <h3 class="text-lg font-bold text-hope-dark mb-4 border-b border-gray-100 pb-3 flex items-center gap-2">
+        <svg class="w-5 h-5 text-hope-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        Last Match Summary
+      </h3>
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+          <span class="text-gray-500 font-medium">Opponent</span>
+          <span class="font-bold text-hope-dark text-base">Team B</span>
+        </div>
+        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+          <span class="text-gray-500 font-medium">Result</span>
+          <span class="font-bold text-hope-lime flex items-center gap-1 text-base">
+             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+             Win
+          </span>
+        </div>
+        <div class="flex justify-between items-center py-2">
+          <span class="text-gray-500 font-medium">Score</span>
+          <span class="font-bold text-gray-700 font-mono text-base">3 - 1</span>
+        </div>
+        <div class="pt-2 text-right">
+           <button class="text-xs font-semibold text-hope-yellow hover:text-yellow-600 px-3 py-1 bg-hope-yellow/10 rounded-full">View Match Report</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

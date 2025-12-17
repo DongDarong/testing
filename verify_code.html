@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify Code | EduSportPro</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            hope: {
+              lime: '#8DC63F',
+              cyan: '#00AEEF',
+              red: '#ED1C24',
+              yellow: '#FDC116',
+              dark: '#1D1D1B',
+              light: '#f2f4f7',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f2f4f7;
+      color: #1D1D1B;
+      font-family: 'Inter', sans-serif;
+    }
+    .fade-in {
+      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-lg bg-white rounded-3xl shadow-xl p-8 md:p-12 relative border border-gray-100 fade-in">
+    
+    <!-- Logo Header -->
+    <div class="flex flex-col items-center mb-8">
+        <div class="w-14 h-14 bg-gradient-to-br from-hope-yellow to-orange-400 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-hope-yellow/30 mb-4">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">EduSportPro</h1>
+        <p class="text-gray-500 text-sm mt-1">Unified Sports Management Platform</p>
+    </div>
+
+    <!-- Verify Code Section -->
+    <div>
+        <a href="forgot_password.html" class="mb-6 text-gray-400 hover:text-gray-600 flex items-center gap-2 text-sm font-medium transition-colors group">
+           <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+           Back
+        </a>
+
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-gray-900">Verify Code</h2>
+          <p class="text-gray-500 text-sm mt-2">Enter the 6-digit code sent to your email.</p>
+        </div>
+
+        <form onsubmit="event.preventDefault(); window.location.href='reset_password.html';" class="space-y-6">
+          <div class="flex justify-between gap-2">
+            <input type="text" maxlength="6" class="w-full h-14 text-center text-3xl font-bold border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:border-hope-yellow focus:ring-2 focus:ring-hope-yellow/20 outline-none tracking-widest" placeholder="000000" />
+          </div>
+
+          <!-- Timer Display -->
+          <div class="text-center">
+             <p class="text-sm text-gray-500">Code expires in <span id="timer" class="font-mono font-bold text-gray-900">02:00</span></p>
+          </div>
+
+          <button type="submit" class="w-full py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-hope-yellow/30 text-sm font-bold text-white bg-hope-yellow hover:bg-yellow-500 focus:outline-none transition-all transform active:scale-[0.98]">
+            Verify Code
+          </button>
+          
+          <div class="text-center text-sm text-gray-500">
+            Didn't receive code? 
+            <button type="button" id="resendBtn" disabled class="font-semibold text-gray-400 cursor-not-allowed transition-colors ml-1">Resend</button>
+          </div>
+        </form>
+    </div>
+  </div>
+
+  <script>
+    // Timer Logic
+    function startTimer(duration, display) {
+      let timer = duration, minutes, seconds;
+      const resendBtn = document.getElementById('resendBtn');
+      
+      const interval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          clearInterval(interval);
+          display.textContent = "00:00";
+          // Enable Resend Button
+          resendBtn.disabled = false;
+          resendBtn.classList.remove('text-gray-400', 'cursor-not-allowed');
+          resendBtn.classList.add('text-hope-yellow', 'hover:underline', 'cursor-pointer');
+          resendBtn.innerText = "Resend Now";
+          
+          resendBtn.onclick = function() {
+              // Reset logic (mock)
+              alert("New code sent!");
+              resendBtn.disabled = true;
+              resendBtn.classList.add('text-gray-400', 'cursor-not-allowed');
+              resendBtn.classList.remove('text-hope-yellow', 'hover:underline', 'cursor-pointer');
+              resendBtn.innerText = "Resend";
+              // Restart timer
+              startTimer(duration, display);
+          };
+        }
+      }, 1000);
+    }
+
+    window.onload = function () {
+      const twoMinutes = 90;
+      const display = document.querySelector('#timer');
+      startTimer(twoMinutes, display);
+    };
+  </script>
+
+</body>
+</html>

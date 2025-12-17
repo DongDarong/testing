@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach – Notifications | EduSportPro</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Configuration with Custom Brand Colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            hope: {
+              lime: '#8DC63F',   // h
+              cyan: '#00AEEF',   // o
+              red: '#ED1C24',    // p
+              yellow: '#FDC116', // e
+              dark: '#1D1D1B',   // Tagline
+              light: '#f2f4f7',  // Background
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f2f4f7;
+      color: #1D1D1B;
+      overflow-x: hidden;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ccc; 
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00AEEF; /* Cyan thumb */
+    }
+
+    /* Glass Backdrop for Mobile Menu */
+    .glass-backdrop {
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+
+<body class="antialiased h-screen flex flex-col">
+
+  <!-- ========================= -->
+  <!-- TOP NAVBAR -->
+  <!-- ========================= -->
+  <nav class="bg-white w-full shadow-sm border-b border-gray-200 flex items-center justify-between px-4 md:px-6 py-3 sticky top-0 z-50 shrink-0">
+    <div class="flex items-center gap-3">
+       <!-- Mobile Menu Button -->
+       <button onclick="toggleSidebar()" class="md:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-hope-cyan">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+
+      <!-- Logo Icon -->
+      <div class="w-8 h-8 md:w-10 md:h-10 bg-hope-lime rounded-lg flex items-center justify-center text-white font-bold text-lg md:text-xl shadow-sm shrink-0">
+        E
+      </div>
+      <!-- Brand Name -->
+      <div class="text-lg md:text-xl font-bold tracking-tight hidden sm:block">
+        <span class="text-hope-lime">Edu</span><span class="text-hope-cyan">Sport</span><span class="text-hope-red">Pro</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 md:gap-6">
+      
+      <!-- Notification Bell -->
+      <a href="/coach/coach-notifications.html" class="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-hope-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        <span class="absolute top-1 right-1 bg-hope-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">4</span>
+      </a>
+
+      <select class="bg-gray-50 border border-gray-200 text-hope-dark text-sm rounded-lg focus:ring-hope-cyan focus:border-hope-cyan block px-2 py-1.5 md:px-3 outline-none">
+        <option>EN</option>
+        <option>KM</option>
+      </select>
+
+      <a href="/coach/coach-profile.html" class="flex items-center gap-2 md:gap-3 cursor-pointer pl-2 md:pl-4 border-l border-gray-200 hover:bg-gray-50 transition-colors rounded-r-lg p-1">
+        <div class="text-right hidden md:block">
+          <div class="text-sm font-semibold text-hope-dark">Coach Sok</div>
+          <div class="text-xs text-gray-500">Team A Coach</div>
+        </div>
+        <div class="w-8 h-8 md:w-9 md:h-9 bg-hope-cyan rounded-full flex items-center justify-center text-white font-bold border-2 border-white shadow-sm shrink-0">
+          CS
+        </div>
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- ========================= -->
+  <!-- LAYOUT WRAPPER -->
+  <!-- ========================= -->
+  <div class="flex h-[calc(100vh-64px)] relative overflow-hidden">
+
+    <!-- Backdrop for Mobile Sidebar -->
+    <div id="sidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 z-[55] hidden transition-opacity opacity-0 md:hidden glass-backdrop"></div>
+
+    <!-- ========================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================= -->
+    <aside id="sidebar" class="w-64 bg-white shadow-xl md:shadow-md flex-shrink-0 z-[60] fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 md:translate-x-0 md:static md:z-auto h-full">
+      <div class="p-5 h-full overflow-y-auto relative">
+        <!-- Close Button (Mobile Only) -->
+        <button onclick="toggleSidebar()" class="absolute top-4 right-4 md:hidden text-gray-400 hover:text-hope-red transition-colors p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Coach Menu</h2>
+        <nav class="space-y-1">
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-dashboard.html">
+            <svg class="w-5 h-5 group-hover:text-hope-cyan transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            Dashboard
+          </a>
+          
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-teams.html">
+            <svg class="w-5 h-5 group-hover:text-hope-lime transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            My Team
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-training.html">
+            <svg class="w-5 h-5 group-hover:text-hope-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            Training Sessions
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-att.html">
+             <svg class="w-5 h-5 group-hover:text-hope-lime transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+            Attendance
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-performance.html">
+            <svg class="w-5 h-5 group-hover:text-hope-cyan transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            Performance
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-matches.html">
+             <svg class="w-5 h-5 group-hover:text-hope-yellow transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Matches
+          </a>
+
+        </nav>
+      </div>
+    </aside>
+
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================= -->
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto w-full">
+
+      <!-- HEADER -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
+        <div>
+           <h1 class="text-2xl md:text-3xl font-bold text-hope-dark">Notifications</h1>
+           <p class="text-gray-500 mt-1 text-sm md:text-base">Updates on schedules, performance, and system alerts.</p>
+        </div>
+        
+        <button id="clearAllBtn" class="w-full md:w-auto bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-hope-red hover:border-hope-red px-5 py-2.5 rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 font-medium">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          Clear All
+        </button>
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- FILTER BUTTONS -->
+      <!-- ========================= -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 mb-6 overflow-x-auto">
+        <div id="notificationFilters" class="flex flex-nowrap gap-2 min-w-max">
+           <button data-filter="all" class="px-4 py-2 bg-hope-cyan text-white rounded-lg shadow-sm font-medium transition-transform transform active:scale-95 text-sm md:text-base">All</button>
+           <button data-filter="system" class="px-4 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-hope-dark transition-colors font-medium text-sm md:text-base">System</button>
+           <button data-filter="training" class="px-4 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-hope-cyan transition-colors font-medium text-sm md:text-base">Training</button>
+           <button data-filter="matches" class="px-4 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-hope-yellow transition-colors font-medium text-sm md:text-base">Matches</button>
+           <button data-filter="performance" class="px-4 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-hope-lime transition-colors font-medium text-sm md:text-base">Performance</button>
+        </div>
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- NOTIFICATION LIST -->
+      <!-- ========================= -->
+      <div class="space-y-4">
+
+        <!-- Notification 1 (Training - Blue/Cyan) -->
+        <div data-type="training" class="bg-white rounded-xl shadow-sm p-4 md:p-5 flex flex-col md:flex-row justify-between items-start md:items-center border-l-4 border-hope-cyan hover:shadow-md transition-shadow group">
+          <div class="flex gap-4">
+             <div class="hidden sm:flex h-12 w-12 rounded-full bg-hope-cyan/10 items-center justify-center text-hope-cyan flex-shrink-0 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+             </div>
+             <div>
+               <h3 class="font-bold text-base md:text-lg text-hope-dark">New Training Session Assigned</h3>
+               <p class="text-gray-600 text-sm">Admin scheduled a new fitness training on Dec 14.</p>
+               <p class="text-hope-cyan text-xs font-medium mt-1">1 hour ago</p>
+             </div>
+          </div>
+
+          <div class="flex gap-2 mt-4 md:mt-0 w-full md:w-auto">
+            <button data-action="mark-read" class="flex-1 md:flex-none justify-center px-3 py-1.5 border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50 text-xs font-medium transition-colors">Mark Read</button>
+            <button data-action="delete" class="flex-1 md:flex-none justify-center px-3 py-1.5 border border-gray-200 text-gray-500 rounded-lg hover:border-hope-red hover:text-hope-red text-xs font-medium transition-colors">Delete</button>
+          </div>
+        </div>
+
+
+        <!-- Notification 2 (Match - Yellow) -->
+        <div data-type="matches" class="bg-white rounded-xl shadow-sm p-4 md:p-5 flex flex-col md:flex-row justify-between items-start md:items-center border-l-4 border-hope-yellow hover:shadow-md transition-shadow group">
+          <div class="flex gap-4">
+             <div class="hidden sm:flex h-12 w-12 rounded-full bg-hope-yellow/10 items-center justify-center text-hope-yellow flex-shrink-0 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+             </div>
+             <div>
+               <h3 class="font-bold text-base md:text-lg text-hope-dark">Match Reminder</h3>
+               <p class="text-gray-600 text-sm">Team A vs Team C on Dec 20 at National Stadium.</p>
+               <p class="text-hope-yellow text-xs font-medium mt-1">4 hours ago</p>
+             </div>
+          </div>
+
+          <div class="flex gap-2 mt-4 md:mt-0 w-full md:w-auto">
+            <button data-action="mark-read" class="flex-1 md:flex-none justify-center px-3 py-1.5 border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50 text-xs font-medium transition-colors">Mark Read</button>
+            <button data-action="delete" class="flex-1 md:flex-none justify-center px-3 py-1.5 border border-gray-200 text-gray-500 rounded-lg hover:border-hope-red hover:text-hope-red text-xs font-medium transition-colors">Delete</button>
+          </div>
+        </div>
+
+
+        <!-- Notification 3 (Performance - Green/Lime) -->
+        <div data-type="performance" class="bg-white rounded-xl shadow-sm p-4 md:p-5 flex flex-col md:flex-row justify-between items-start md:items-center border-l-4 border-hope-lime hover:shadow-md transition-shadow group">
+          <div class="flex gap-4">
+             <div class="hidden sm:flex h-12 w-12 rounded-full bg-hope-lime/10 items-center justify-center text-hope-lime flex-shrink-0 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+             </div>
+             <div>
+               <h3 class="font-bold text-base md:text-lg text-hope-dark">Performance Report Updated</h3>
+               <p class="text-gray-600 text-sm">Player performance for last match has been updated.</p>
+               <p class="text-hope-lime text-xs font-medium mt-1">Yesterday</p>
+             </div>
+          </div>
+
+          <div class="flex gap-2 mt-4 md:mt-0 w-full md:w-auto">
+            <button data-action="mark-read" class="flex-1 md:flex-none justify-center px-3 py-1.5 border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50 text-xs font-medium transition-colors">Mark Read</button>
+            <button data-action="delete" class="flex-1 md:flex-none justify-center px-3 py-1.5 border border-gray-200 text-gray-500 rounded-lg hover:border-hope-red hover:text-hope-red text-xs font-medium transition-colors">Delete</button>
+          </div>
+        </div>
+
+
+        <!-- Notification 4 (System Alert - Red) -->
+        <div data-type="system" class="bg-white rounded-xl shadow-sm p-4 md:p-5 flex flex-col md:flex-row justify-between items-start md:items-center border-l-4 border-hope-red hover:shadow-md transition-shadow group">
+          <div class="flex gap-4">
+             <div class="hidden sm:flex h-12 w-12 rounded-full bg-hope-red/10 items-center justify-center text-hope-red flex-shrink-0 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+             </div>
+             <div>
+               <h3 class="font-bold text-base md:text-lg text-hope-dark">Training Cancelled</h3>
+               <p class="text-gray-600 text-sm">Today's session was cancelled due to weather.</p>
+               <p class="text-hope-red text-xs font-medium mt-1">2 days ago</p>
+             </div>
+          </div>
+
+          <div class="flex gap-2 mt-4 md:mt-0 w-full md:w-auto">
+            <button data-action="mark-read" class="flex-1 md:flex-none justify-center px-3 py-1.5 border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50 text-xs font-medium transition-colors">Mark Read</button>
+            <button data-action="delete" class="flex-1 md:flex-none justify-center px-3 py-1.5 border border-gray-200 text-gray-500 rounded-lg hover:border-hope-red hover:text-hope-red text-xs font-medium transition-colors">Delete</button>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmModal" class="fixed inset-0 z-[60] hidden items-center justify-center">
+    <div id="confirmBackdrop" class="absolute inset-0 bg-black/50"></div>
+    <div class="relative bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6 z-10">
+      <h3 class="text-lg font-semibold mb-2">Confirm action</h3>
+      <p id="confirmMessage" class="text-sm text-gray-600 mb-4">Are you sure?</p>
+      <div class="flex justify-end gap-2">
+        <button id="confirmCancel" class="px-4 py-2 bg-gray-100 rounded-lg">Cancel</button>
+        <button id="confirmOk" class="px-4 py-2 bg-hope-red text-white rounded-lg">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      const body = document.body;
+      
+      if (sidebar.classList.contains('-translate-x-full')) {
+        // Open Sidebar
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+        setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+        body.style.overflow = 'hidden'; 
+      } else {
+        // Close Sidebar
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('opacity-0');
+        setTimeout(() => backdrop.classList.add('hidden'), 300); 
+        body.style.overflow = 'auto';
+      }
+    }
+  </script>
+
+  <script>
+    // Notification filter + actions logic with confirmation modal
+    (function () {
+      const filterContainer = document.getElementById('notificationFilters');
+      const clearAllBtn = document.getElementById('clearAllBtn');
+      const listContainer = document.querySelector('.space-y-4');
+      const modal = document.getElementById('confirmModal');
+      const modalMessage = document.getElementById('confirmMessage');
+      const modalOk = document.getElementById('confirmOk');
+      const modalCancel = document.getElementById('confirmCancel');
+      const modalBackdrop = document.getElementById('confirmBackdrop');
+      const buttons = filterContainer ? Array.from(filterContainer.querySelectorAll('button[data-filter]')) : [];
+      let notifications = Array.from(document.querySelectorAll('[data-type]'));
+      let pending = null; // { type: 'delete'|'clearAll', targets: [elements], confirmLabel }
+
+      function showModal(message, confirmLabel = 'Delete', targets = [], type = 'delete') {
+        pending = { type, targets };
+        modalMessage.textContent = message;
+        modalOk.textContent = confirmLabel;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => modal.classList.add('opacity-100'), 10);
+      }
+
+      function closeModal() {
+        pending = null;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+
+      modalCancel.addEventListener('click', closeModal);
+      modalBackdrop.addEventListener('click', closeModal);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      modalOk.addEventListener('click', () => {
+        if (!pending) return closeModal();
+        if (pending.type === 'delete') {
+          pending.targets.forEach(t => t.remove());
+        }
+        if (pending.type === 'clearAll') {
+          const all = Array.from(document.querySelectorAll('[data-type]'));
+          all.forEach(a => a.remove());
+        }
+        closeModal();
+      });
+
+      function setActive(button) {
+        buttons.forEach(b => {
+          b.classList.remove('bg-hope-cyan', 'text-white');
+          b.classList.add('bg-gray-50', 'text-gray-600');
+        });
+        button.classList.remove('bg-gray-50', 'text-gray-600');
+        button.classList.add('bg-hope-cyan', 'text-white');
+      }
+
+      function applyFilter(type) {
+        notifications = Array.from(document.querySelectorAll('[data-type]'));
+        if (type === 'all') {
+          notifications.forEach(n => n.style.display = '');
+          return;
+        }
+        notifications.forEach(n => {
+          n.style.display = (n.getAttribute('data-type') === type) ? '' : 'none';
+        });
+      }
+
+      // Attach filter listeners
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const type = btn.getAttribute('data-filter');
+          setActive(btn);
+          applyFilter(type);
+        });
+      });
+
+      // Clear All behavior - asks for confirmation
+      if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', () => {
+          const count = document.querySelectorAll('[data-type]').length;
+          if (count === 0) return;
+          showModal(`Are you sure you want to clear all ${count} notification(s)?`, 'Clear All', [], 'clearAll');
+        });
+      }
+
+      // Delegate actions for Mark Read and Delete
+      if (listContainer) {
+        listContainer.addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-action]');
+          if (!btn) return;
+          const action = btn.getAttribute('data-action');
+          const card = btn.closest('[data-type]');
+          if (!card) return;
+
+          if (action === 'mark-read') {
+            // Toggle read state: add subtle visual using opacity
+            const isRead = card.dataset.read === 'true';
+            card.dataset.read = isRead ? 'false' : 'true';
+            card.classList.toggle('opacity-60', !isRead);
+            return;
+          }
+
+          if (action === 'delete') {
+            showModal('Are you sure you want to delete this notification?', 'Delete', [card], 'delete');
+            return;
+          }
+        });
+      }
+
+      // Ensure default active is 'all'
+      const defaultBtn = buttons.find(b => b.getAttribute('data-filter') === 'all') || buttons[0];
+      if (defaultBtn) setActive(defaultBtn);
+    })();
+  </script>
+
+</body>
+
+</html>

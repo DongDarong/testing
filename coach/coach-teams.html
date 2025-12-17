@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach – Teams | EduSportPro</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Configuration with Custom Brand Colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            hope: {
+              lime: '#8DC63F',   // h
+              cyan: '#00AEEF',   // o
+              red: '#ED1C24',    // p
+              yellow: '#FDC116', // e
+              dark: '#1D1D1B',   // Tagline
+              light: '#f2f4f7',  // Background
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f2f4f7;
+      color: #1D1D1B;
+      overflow-x: hidden;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ccc; 
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00AEEF; /* Cyan thumb */
+    }
+
+    /* Glass Backdrop for Mobile Menu */
+    .glass-backdrop {
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+
+<body class="antialiased h-screen flex flex-col">
+
+  <!-- ========================= -->
+  <!-- TOP NAVBAR -->
+  <!-- ========================= -->
+  <nav class="bg-white w-full shadow-sm border-b border-gray-200 flex items-center justify-between px-4 md:px-6 py-3 sticky top-0 z-50 shrink-0">
+    <div class="flex items-center gap-3">
+       <!-- Mobile Menu Button -->
+       <button onclick="toggleSidebar()" class="md:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-hope-cyan">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+
+      <!-- Logo Icon -->
+      <div class="w-8 h-8 md:w-10 md:h-10 bg-hope-lime rounded-lg flex items-center justify-center text-white font-bold text-lg md:text-xl shadow-sm shrink-0">
+        E
+      </div>
+      <!-- Brand Name -->
+      <div class="text-lg md:text-xl font-bold tracking-tight hidden sm:block">
+        <span class="text-hope-lime">Edu</span><span class="text-hope-cyan">Sport</span><span class="text-hope-red">Pro</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 md:gap-6">
+      
+      <!-- Notification Bell -->
+      <a href="/coach/coach-notifications.html" class="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-hope-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        <span class="absolute top-1 right-1 bg-hope-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">4</span>
+      </a>
+
+      <select class="bg-gray-50 border border-gray-200 text-hope-dark text-sm rounded-lg focus:ring-hope-cyan focus:border-hope-cyan block px-2 py-1.5 md:px-3 outline-none">
+        <option>EN</option>
+        <option>KM</option>
+      </select>
+
+      <a href="/coach/coach-profile.html" class="flex items-center gap-2 md:gap-3 cursor-pointer pl-2 md:pl-4 border-l border-gray-200 hover:bg-gray-50 transition-colors rounded-r-lg p-1">
+        <div class="text-right hidden md:block">
+          <div class="text-sm font-semibold text-hope-dark">Coach Sok</div>
+          <div class="text-xs text-gray-500">Team A Coach</div>
+        </div>
+        <div class="w-8 h-8 md:w-9 md:h-9 bg-hope-cyan rounded-full flex items-center justify-center text-white font-bold border-2 border-white shadow-sm shrink-0">
+          CS
+        </div>
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- ========================= -->
+  <!-- LAYOUT WRAPPER -->
+  <!-- ========================= -->
+  <div class="flex h-[calc(100vh-64px)] relative overflow-hidden">
+
+    <!-- Backdrop for Mobile Sidebar -->
+    <div id="sidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 z-[55] hidden transition-opacity opacity-0 md:hidden glass-backdrop"></div>
+
+    <!-- ========================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================= -->
+    <aside id="sidebar" class="w-64 bg-white shadow-xl md:shadow-md flex-shrink-0 z-[60] fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 md:translate-x-0 md:static md:z-auto h-full">
+      <div class="p-5 h-full overflow-y-auto relative">
+        <!-- Close Button (Mobile Only) -->
+        <button onclick="toggleSidebar()" class="absolute top-4 right-4 md:hidden text-gray-400 hover:text-hope-red transition-colors p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Coach Menu</h2>
+        <nav class="space-y-1">
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-dashboard.html">
+            <svg class="w-5 h-5 group-hover:text-hope-cyan transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            Dashboard
+          </a>
+          
+          <!-- Active State: Teams (Using CYAN theme) -->
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg bg-hope-cyan/10 text-hope-cyan font-semibold" href="#">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            My Teams
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-training.html">
+            <svg class="w-5 h-5 group-hover:text-hope-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            Training Sessions
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-att.html">
+             <svg class="w-5 h-5 group-hover:text-hope-lime transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+            Attendance
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-performance.html">
+            <svg class="w-5 h-5 group-hover:text-hope-cyan transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            Performance
+          </a>
+
+          <a class="flex items-center gap-3 py-2.5 px-4 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-hope-dark transition-colors group" href="/coach/coach-matches.html">
+             <svg class="w-5 h-5 group-hover:text-hope-yellow transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Matches
+          </a>
+
+        </nav>
+      </div>
+    </aside>
+
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================= -->
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto w-full">
+
+      <!-- HEADER -->
+      <div class="mb-6 md:mb-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-hope-dark">Teams</h1>
+        <p class="text-gray-500 mt-1 text-sm md:text-base">Manage your teams and view player rosters.</p>
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- ALL TEAMS LIST -->
+      <!-- ========================= -->
+      <div class="mb-8">
+        <h2 class="text-base md:text-lg font-bold text-hope-dark mb-4">All Teams</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Team A (Active) -->
+          <div class="bg-white p-4 rounded-xl shadow-sm border-2 border-hope-cyan cursor-pointer relative transition-transform transform hover:scale-[1.01]">
+               <div class="absolute top-2 right-2 text-hope-cyan bg-hope-cyan/10 rounded-full p-1">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+               </div>
+               <h3 class="font-bold text-hope-dark text-lg mb-1">Team A</h3>
+               <p class="text-sm text-gray-500">22 Players • Coach Sok</p>
+          </div>
+          <!-- Team B -->
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-hope-cyan/50 hover:shadow-md cursor-pointer transition-all">
+               <h3 class="font-bold text-gray-700 text-lg mb-1">Team B</h3>
+               <p class="text-sm text-gray-500">18 Players • Coach Vuthy</p>
+          </div>
+          <!-- Team C -->
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-hope-cyan/50 hover:shadow-md cursor-pointer transition-all">
+               <h3 class="font-bold text-gray-700 text-lg mb-1">Team C</h3>
+               <p class="text-sm text-gray-500">20 Players • Coach Dara</p>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- SELECTED TEAM DETAILS -->
+      <!-- ========================= -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 mb-6 md:mb-8">
+        <div class="flex items-center justify-between mb-4 md:mb-5">
+          <h2 class="text-base md:text-lg font-bold text-hope-dark flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-hope-cyan"></span>
+            Team A Overview
+          </h2>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-green-50 text-green-700 border border-green-200">Active Season</span>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+            <p class="text-gray-500 text-xs md:text-sm font-medium">Head Coach</p>
+            <h3 class="text-lg md:text-xl font-bold text-hope-dark mt-1">Sok Rith</h3>
+          </div>
+
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+            <p class="text-gray-500 text-xs md:text-sm font-medium">Total Players</p>
+            <h3 class="text-lg md:text-xl font-bold text-hope-dark mt-1">22</h3>
+          </div>
+
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+            <p class="text-gray-500 text-xs md:text-sm font-medium">Next Match</p>
+            <h3 class="text-lg md:text-xl font-bold text-hope-yellow mt-1">Dec 20</h3>
+            <p class="text-xs text-gray-400">vs Team C</p>
+          </div>
+
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+             <p class="text-gray-500 text-xs md:text-sm font-medium">Weekly Training</p>
+            <h3 class="text-lg md:text-xl font-bold text-hope-lime mt-1">6 Sessions</h3>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- ACTION BAR -->
+      <!-- ========================= -->
+      <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+        <div class="relative w-full md:w-1/2">
+           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+           </div>
+           <input type="text" placeholder="Search players by name or position..." class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-hope-cyan/50 focus:border-hope-cyan text-sm shadow-sm transition-all">
+        </div>
+
+        <button onclick="openModal()" class="w-full md:w-auto bg-hope-cyan hover:bg-sky-500 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 font-medium">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+          Add Player
+        </button>
+      </div>
+
+
+      <!-- ========================= -->
+      <!-- PLAYER GRID -->
+      <!-- ========================= -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+
+        <!-- Player Card 1 -->
+        <div class="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group relative">
+          <button class="absolute top-4 right-4 text-gray-300 hover:text-hope-cyan transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
+          </button>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="h-14 w-14 rounded-full bg-hope-cyan/10 flex items-center justify-center text-hope-cyan font-bold text-xl border-2 border-white shadow-sm shrink-0">
+              RS
+            </div>
+            <div>
+              <h3 class="text-base md:text-lg font-bold text-hope-dark">Rina Seng</h3>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                Forward
+              </span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center text-sm text-gray-500 border-t border-gray-50 pt-3">
+             <span>Jersey: <strong class="text-gray-900">#9</strong></span>
+             <span>Age: <strong class="text-gray-900">21</strong></span>
+          </div>
+        </div>
+
+        <!-- Player Card 2 -->
+        <div class="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group relative">
+           <button class="absolute top-4 right-4 text-gray-300 hover:text-hope-cyan transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
+          </button>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="h-14 w-14 rounded-full bg-hope-lime/10 flex items-center justify-center text-hope-lime font-bold text-xl border-2 border-white shadow-sm shrink-0">
+              SR
+            </div>
+            <div>
+              <h3 class="text-base md:text-lg font-bold text-hope-dark">Sok Rith</h3>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                Midfielder
+              </span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center text-sm text-gray-500 border-t border-gray-50 pt-3">
+             <span>Jersey: <strong class="text-gray-900">#6</strong></span>
+             <span>Age: <strong class="text-gray-900">22</strong></span>
+          </div>
+        </div>
+
+        <!-- Player Card 3 -->
+        <div class="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group relative">
+           <button class="absolute top-4 right-4 text-gray-300 hover:text-hope-cyan transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
+          </button>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="h-14 w-14 rounded-full bg-hope-red/10 flex items-center justify-center text-hope-red font-bold text-xl border-2 border-white shadow-sm shrink-0">
+              CD
+            </div>
+            <div>
+              <h3 class="text-base md:text-lg font-bold text-hope-dark">Chan Dara</h3>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                Defender
+              </span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center text-sm text-gray-500 border-t border-gray-50 pt-3">
+             <span>Jersey: <strong class="text-gray-900">#4</strong></span>
+             <span>Age: <strong class="text-gray-900">23</strong></span>
+          </div>
+        </div>
+
+        <!-- Player Card 4 -->
+        <div class="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group relative">
+           <button class="absolute top-4 right-4 text-gray-300 hover:text-hope-cyan transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
+          </button>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="h-14 w-14 rounded-full bg-hope-yellow/10 flex items-center justify-center text-hope-yellow font-bold text-xl border-2 border-white shadow-sm shrink-0">
+              VL
+            </div>
+            <div>
+              <h3 class="text-base md:text-lg font-bold text-hope-dark">Vuthy Lim</h3>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                Goalkeeper
+              </span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center text-sm text-gray-500 border-t border-gray-50 pt-3">
+             <span>Jersey: <strong class="text-gray-900">#1</strong></span>
+             <span>Age: <strong class="text-gray-900">24</strong></span>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- ADD PLAYER MODAL -->
+  <!-- ========================= -->
+  <div id="playerModal" class="fixed inset-0 z-[70] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="closeModal()"></div>
+
+    <div class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
+      
+      <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all w-full max-w-lg">
+        
+        <!-- Modal Header -->
+        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 border-b border-gray-100">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-hope-cyan/10 sm:mx-0 sm:h-10 sm:w-10">
+               <svg class="h-6 w-6 text-hope-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+            </div>
+            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <h3 class="text-lg font-semibold leading-6 text-hope-dark" id="modal-title">Add New Player</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">Enter details to register a new player to Team A.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="bg-white px-4 py-5 sm:p-6 space-y-4">
+          
+          <div>
+             <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+             <input type="text" placeholder="e.g. Kosal Pheak" class="w-full rounded-lg border-gray-300 border p-2.5 text-gray-900 focus:border-hope-cyan focus:ring-hope-cyan sm:text-sm shadow-sm outline-none">
+          </div>
+
+          <div>
+             <label class="block text-sm font-medium text-gray-700 mb-1">Position</label>
+             <select class="w-full rounded-lg border-gray-300 border p-2.5 text-gray-900 focus:border-hope-cyan focus:ring-hope-cyan sm:text-sm shadow-sm outline-none">
+              <option>Forward</option>
+              <option>Midfielder</option>
+              <option>Defender</option>
+              <option>Goalkeeper</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Jersey Number</label>
+              <input type="number" placeholder="#" class="w-full rounded-lg border-gray-300 border p-2.5 text-gray-900 focus:border-hope-cyan focus:ring-hope-cyan sm:text-sm shadow-sm outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Age</label>
+              <input type="number" placeholder="Years" class="w-full rounded-lg border-gray-300 border p-2.5 text-gray-900 focus:border-hope-cyan focus:ring-hope-cyan sm:text-sm shadow-sm outline-none">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 border-t border-gray-100 flex flex-col gap-3 sm:gap-0">
+          <button type="button" class="inline-flex w-full justify-center rounded-lg bg-hope-cyan px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 sm:ml-3 sm:w-auto transition-colors">Add Player</button>
+          <button type="button" onclick="closeModal()" class="mt-0 inline-flex w-full justify-center rounded-lg bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto transition-colors">Cancel</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SCRIPTS -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      const body = document.body;
+      
+      if (sidebar.classList.contains('-translate-x-full')) {
+        // Open Sidebar
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+        setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+        body.style.overflow = 'hidden'; 
+      } else {
+        // Close Sidebar
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('opacity-0');
+        setTimeout(() => backdrop.classList.add('hidden'), 300); 
+        body.style.overflow = 'auto';
+      }
+    }
+
+    function openModal() {
+      const modal = document.getElementById("playerModal");
+      modal.classList.remove("hidden");
+      document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("playerModal");
+      modal.classList.add("hidden");
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    });
+  </script>
+
+</body>
+
+</html>
