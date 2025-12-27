@@ -1,282 +1,331 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="km">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign In | EduSportPro</title>
+  <meta charset="UTF-8">
+  <title>✨ Christmas Magic & Flowers ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+Khmer:wght@300;400;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind Configuration with Custom Brand Colors -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            hope: {
-              lime: '#8DC63F',   // h
-              cyan: '#00AEEF',   // o
-              red: '#ED1C24',    // p
-              yellow: '#FDC116', // e
-              dark: '#1D1D1B',   // Tagline
-              light: '#f2f4f7',  // Background
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    body {
-      background-color: #f2f4f7;
-      color: #1D1D1B;
-      font-family: 'Inter', sans-serif;
+    body { font-family: 'Noto Sans Khmer', sans-serif; -webkit-tap-highlight-color: transparent; }
+    .gold-text { 
+      background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .fancy-font { font-family: 'Cinzel', serif; }
+
+    /* Glassmorphism */
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
 
-    .hidden-section {
-      display: none;
+    /* Floating Animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
     }
-    
-    /* Animations */
-    .fade-in {
-      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .slide-in-right {
-      animation: slideInRight 0.3s ease-out;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
+    .float { animation: float 5s ease-in-out infinite; }
+
+    /* Flower Animation */
+    .flower {
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      animation: flowerBurst 2.5s ease-out forwards;
+      font-size: 1.5rem;
     }
 
-    /* Card Hover Effects */
-    .role-card {
+    @keyframes flowerBurst {
+      0% {
+        transform: translate(-50%, -50%) scale(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.2) rotate(var(--tr));
+        opacity: 0;
+      }
+    }
+
+    /* Snow Canvas */
+    canvas#snow { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 50; }
+
+    /* Custom Button Glow */
+    .btn-gold {
+      background: linear-gradient(45deg, #b38728, #fbf5b7);
       transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(179, 135, 40, 0.4);
     }
-    .role-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
-      border-color: currentColor;
+    .btn-gold:active {
+      transform: scale(0.95);
+    }
+
+    .caption-glow {
+      text-shadow: 0 0 8px rgba(191, 149, 63, 0.5);
+    }
+
+    /* Mobile specific adjustment to prevent horizontal scroll */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
     }
   </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="bg-[#020617] text-slate-100">
 
-  <!-- ============================ -->
-  <!-- CENTERED CONTENT CARD -->
-  <!-- ============================ -->
-  <div class="w-full max-w-lg bg-white rounded-3xl shadow-xl p-8 md:p-12 relative border border-gray-100">
+<canvas id="snow"></canvas>
+
+<!-- 💬 Subtitle -->
+<div id="subtitle"
+  class="fixed top-6 md:top-10 left-1/2 -translate-x-1/2
+         glass px-6 md:px-8 py-2 md:py-3 rounded-full
+         text-sm md:text-lg font-medium text-white
+         opacity-0 transition-all duration-500 z-[9999] text-center w-[85%] md:w-auto">
+</div>
+
+<!-- 🎁 Landing Section -->
+<section id="landing" class="min-h-screen flex flex-col items-center justify-center text-center px-4 md:px-6 relative overflow-hidden">
+  <div class="absolute w-64 h-64 md:w-96 md:h-96 bg-blue-500/10 rounded-full blur-[80px] md:blur-[120px] -top-20 -left-20"></div>
+  
+  <h1 class="fancy-font text-4xl sm:text-5xl md:text-7xl mb-4 md:mb-6 gold-text font-bold float px-2">
+    Merry Christmas <br>
+    <span class="text-white text-3xl sm:text-4xl md:text-5xl">ស្នេហារបស់ខ្ញុំ</span>
+  </h1>
+  <p class="text-sm md:text-xl text-blue-200/80 mb-8 md:mb-10 tracking-[0.2em] md:tracking-widest uppercase">
+    🌸 A Garden of Love 🌸
+  </p>
+  <button onclick="openGift(event)"
+    class="btn-gold text-blue-950 px-8 md:px-12 py-4 md:py-5 rounded-full font-bold text-base md:text-lg uppercase tracking-wider">
+    🎁 បើកអំណោយផ្កា
+  </button>
+  <p class="mt-6 text-xs md:text-sm text-gray-400 italic px-4">"អំណោយដែលចេញពីបេះដូង សម្រាប់មនុស្សដែលសំខាន់បំផុត"</p>
+</section>
+
+<!-- ❤️ Content Section -->
+<section id="content" class="hidden">
+  
+  <audio id="bgMusic" loop>
+    <source src="/song.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- 💌 Letter -->
+  <section class="min-h-[80vh] md:min-h-screen flex flex-col items-center justify-center px-4 md:px-6 py-12 md:py-20 bg-gradient-to-b from-[#020617] to-[#0f172a]">
+    <div class="w-full max-w-3xl glass p-8 md:p-16 rounded-[30px] md:rounded-[40px] text-center border-t-white/20">
+      <h2 class="fancy-font text-2xl md:text-4xl mb-3 md:mb-4 gold-text uppercase">To My Sweetheart 💖</h2>
+      <p class="text-[10px] md:text-sm text-gold-200 mb-6 md:mb-8 uppercase tracking-[0.2em] font-bold opacity-70">— សំបុត្រស្នេហ៍ផ្ញើជូនអូន —</p>
+      <p class="text-base md:text-xl text-blue-50 leading-relaxed md:leading-loose font-light">
+        Christmas នេះ ខ្ញុំចង់ជូនផ្កាដែលស្អាតបំផុតដល់អ្នក។ <br>
+        តែគ្មានផ្កាណាស្អាតជាងស្នាមញញឹមរបស់អ្នកឡើយ។ <br class="hidden md:block">
+        អរគុណដែលធ្វើឱ្យពិភពលោករបស់ខ្ញុំស្រស់បំព្រង។ <br>
+        <span class="text-xl md:text-2xl mt-4 block font-bold text-pink-400">ស្រឡាញ់អ្នកជានិច្ច ❤️</span>
+      </p>
+    </div>
+    <p class="mt-6 md:mt-8 text-blue-300/60 italic text-center text-xs md:text-base px-6">"រៀងរាល់ឆ្នាំ រៀងរាល់ថ្ងៃ បេះដូងបងនៅតែមានតែអូនម្នាក់"</p>
+  </section>
+
+  <!-- 📸 Gallery -->
+  <section class="py-16 md:py-24 bg-[#0f172a]">
+    <div class="text-center mb-10 md:mb-16 px-4">
+      <h2 class="fancy-font text-3xl md:text-4xl gold-text mb-2">Our Magical Moments</h2>
+      <p class="text-sm md:text-base text-blue-300/70 font-light italic">"ការចងចាំដែលមិនអាចបំភ្លេចបានរវាងយើងទាំងពីរ"</p>
+    </div>
     
-    <!-- Logo Header -->
-    <div class="flex flex-col items-center mb-8">
-        <div class="w-14 h-14 bg-gradient-to-br from-hope-lime to-green-500 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-hope-lime/30 mb-4">
-          E
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-10 px-4 md:px-6 max-w-6xl mx-auto">
+      <!-- Image 1 -->
+      <div class="glass p-3 md:p-4 rounded-2xl transform hover:scale-105 transition duration-500">
+        <div class="aspect-square overflow-hidden rounded-xl mb-3 md:mb-4">
+          <img src="https://images.unsplash.com/photo-1516589174184-c6858b16ecb0?q=80&w=400" class="w-full h-full object-cover" alt="love">
         </div>
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900">EduSportPro</h1>
-        <p class="text-gray-500 text-sm mt-1">Unified Sports Management Platform</p>
+        <h3 class="text-gold-200 font-bold text-sm md:text-base mb-1 caption-glow">The Start of Us</h3>
+        <p class="text-xs md:text-sm text-blue-200 italic font-light">"ថ្ងៃដែលបេះដូងបងចាប់ផ្ដើមលោតដើម្បីអូន"</p>
+      </div>
+      <!-- Image 2 -->
+      <div class="glass p-3 md:p-4 rounded-2xl transform hover:scale-105 transition duration-500 md:translate-y-12">
+        <div class="aspect-square overflow-hidden rounded-xl mb-3 md:mb-4">
+          <img src="https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=400" class="w-full h-full object-cover" alt="love">
+        </div>
+        <h3 class="text-gold-200 font-bold text-sm md:text-base mb-1 caption-glow">Pure Happiness</h3>
+        <p class="text-xs md:text-sm text-blue-200 italic font-light">"ស្នាមញញឹមរបស់អូន គឺជាកម្លាំងចិត្តរបស់បង"</p>
+      </div>
+      <!-- Image 3 -->
+      <div class="glass p-3 md:p-4 rounded-2xl transform hover:scale-105 transition duration-500">
+        <div class="aspect-square overflow-hidden rounded-xl mb-3 md:mb-4">
+          <img src="https://images.unsplash.com/photo-1522673607200-164883212c2f?q=80&w=400" class="w-full h-full object-cover" alt="love">
+        </div>
+        <h3 class="text-gold-200 font-bold text-sm md:text-base mb-1 caption-glow">Forever & Always</h3>
+        <p class="text-xs md:text-sm text-blue-200 italic font-light">"យើងនឹងដើរកាន់ដៃគ្នា រហូតដល់ថ្ងៃអវសាន"</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🎁 Final Surprise -->
+  <section class="min-h-screen flex flex-col items-center justify-center text-center bg-[#020617] px-6 relative">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
+      <div class="absolute top-10 left-10 text-6xl md:text-8xl">🎄</div>
+      <div class="absolute bottom-10 right-10 text-6xl md:text-8xl">🎁</div>
     </div>
 
-    <div class="w-full">
-
-      <!-- ============================ -->
-      <!-- 1. ROLE SELECTION SCREEN -->
-      <!-- ============================ -->
-      <section id="roleSelection" class="fade-in">
-        <div class="text-center mb-8">
-          <h2 class="text-lg font-semibold text-gray-700">Select Your Portal</h2>
-        </div>
-
-        <div class="grid grid-cols-1 gap-5">
-          
-          <!-- ADMIN CARD -->
-          <button onclick="showAdminLogin()" class="role-card group bg-white border border-gray-100 p-5 rounded-2xl text-left relative overflow-hidden hover:border-hope-red/50">
-             <div class="absolute right-0 top-0 w-24 h-24 bg-gradient-to-bl from-hope-red/10 to-transparent rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-110"></div>
-             
-             <div class="flex items-center gap-5 relative z-10">
-                <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center text-hope-red group-hover:bg-hope-red group-hover:text-white transition-colors shadow-sm shrink-0">
-                   <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                </div>
-                <div>
-                   <h3 class="text-lg font-bold text-gray-900 group-hover:text-hope-red transition-colors">Admin Portal</h3>
-                   <p class="text-xs text-gray-500 mt-1">Access system settings & management</p>
-                </div>
-                <div class="ml-auto text-gray-300 group-hover:text-hope-red transition-colors transform group-hover:translate-x-1">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                </div>
-             </div>
-          </button>
-
-          <!-- COACH & PLAYER CARD -->
-          <button onclick="showUserLogin()" class="role-card group bg-white border border-gray-100 p-5 rounded-2xl text-left relative overflow-hidden hover:border-hope-cyan/50">
-             <div class="absolute right-0 top-0 w-24 h-24 bg-gradient-to-bl from-hope-cyan/10 to-transparent rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-110"></div>
-             
-             <div class="flex items-center gap-5 relative z-10">
-                <div class="w-14 h-14 bg-cyan-50 rounded-xl flex items-center justify-center text-hope-cyan group-hover:bg-hope-cyan group-hover:text-white transition-colors shadow-sm shrink-0">
-                   <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                </div>
-                <div>
-                   <h3 class="text-lg font-bold text-gray-900 group-hover:text-hope-cyan transition-colors">Team Portal</h3>
-                   <p class="text-xs text-gray-500 mt-1">Access schedules & performance</p>
-                </div>
-                <div class="ml-auto text-gray-300 group-hover:text-hope-cyan transition-colors transform group-hover:translate-x-1">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                </div>
-             </div>
-          </button>
-
-        </div>
-      </section>
-
-
-      <!-- ============================ -->
-      <!-- 2. ADMIN LOGIN FORM -->
-      <!-- ============================ -->
-      <section id="adminLogin" class="hidden-section slide-in-right">
-        <button onclick="showRoleSelection()" class="mb-6 text-gray-400 hover:text-gray-600 flex items-center gap-2 text-sm font-medium transition-colors group">
-           <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-           Back to Roles
-        </button>
-
-        <div class="mb-6">
-           <h2 class="text-2xl font-bold text-gray-900">Admin Login</h2>
-           <p class="text-gray-500 text-sm mt-1">Please enter your admin credentials.</p>
-        </div>
-
-        <form onsubmit="event.preventDefault(); window.location.href='./admin/admin-dashboard.html';" class="space-y-5">
-           <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-              <div class="relative">
-                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
-                 </div>
-                 <input type="email" required class="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 pl-10 text-gray-900 focus:bg-white focus:border-hope-red focus:ring-2 focus:ring-hope-red/20 outline-none transition-all" placeholder="admin@edusportpro.com" />
-              </div>
-           </div>
-
-           <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <div class="relative">
-                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                 </div>
-                 <input type="password" required class="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 pl-10 text-gray-900 focus:bg-white focus:border-hope-red focus:ring-2 focus:ring-hope-red/20 outline-none transition-all" placeholder="••••••••" />
-              </div>
-           </div>
-
-           <div class="flex items-center justify-between">
-              <label class="flex items-center">
-                 <input type="checkbox" class="h-4 w-4 text-hope-red focus:ring-hope-red border-gray-300 rounded cursor-pointer">
-                 <span class="ml-2 block text-sm text-gray-600 cursor-pointer">Remember me</span>
-              </label>
-              <a href="forgot_password.html" class="text-sm font-medium text-hope-red hover:text-red-700 hover:underline">Forgot password?</a>
-           </div>
-
-           <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-hope-red/30 text-sm font-bold text-white bg-hope-red hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-hope-red transition-all transform active:scale-[0.98]">
-              Sign In
-           </button>
-        </form>
-      </section>
-
-
-      <!-- ============================ -->
-      <!-- 3. COACH/PLAYER LOGIN FORM -->
-      <!-- ============================ -->
-      <section id="userLogin" class="hidden-section slide-in-right">
-        <button onclick="showRoleSelection()" class="mb-6 text-gray-400 hover:text-gray-600 flex items-center gap-2 text-sm font-medium transition-colors group">
-           <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-           Back to Roles
-        </button>
-
-        <div class="mb-6">
-           <h2 class="text-2xl font-bold text-gray-900">Team Login</h2>
-           <p class="text-gray-500 text-sm mt-1">Enter your details to access the team hub.</p>
-        </div>
-
-        <form onsubmit="event.preventDefault(); window.location.href='./coach/coach-dashboard.html';" class="space-y-5">
-           <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Email or Player ID</label>
-              <div class="relative">
-                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
-                 </div>
-                 <input type="text" required class="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 pl-10 text-gray-900 focus:bg-white focus:border-hope-cyan focus:ring-2 focus:ring-hope-cyan/20 outline-none transition-all" placeholder="coach@team.com" />
-              </div>
-           </div>
-
-           <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <div class="relative">
-                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                 </div>
-                 <input type="password" required class="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 pl-10 text-gray-900 focus:bg-white focus:border-hope-cyan focus:ring-2 focus:ring-hope-cyan/20 outline-none transition-all" placeholder="••••••••" />
-              </div>
-           </div>
-
-           <div class="flex items-center justify-between">
-              <label class="flex items-center">
-                 <input type="checkbox" class="h-4 w-4 text-hope-cyan focus:ring-hope-cyan border-gray-300 rounded cursor-pointer">
-                 <span class="ml-2 block text-sm text-gray-600 cursor-pointer">Remember me</span>
-              </label>
-              <a href="forgot_password.html" class="text-sm font-medium text-hope-cyan hover:text-sky-600 hover:underline">Forgot password?</a>
-           </div>
-
-           <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-hope-cyan/30 text-sm font-bold text-white bg-hope-cyan hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-hope-cyan transition-all transform active:scale-[0.98]">
-              Sign In
-           </button>
-        </form>
-      </section>
-
+    <h2 class="fancy-font text-3xl md:text-5xl mb-4 gold-text">A Thousand Flowers</h2>
+    <p class="mb-10 md:mb-12 text-blue-200/60 text-sm md:text-base italic px-4">"ព្រោះអូនគឺជាផ្កាដែលស្រស់ស្អាតបំផុតក្នុងជីវិតបង"</p>
+    
+    <button onclick="finalSurprise(event)"
+      class="btn-gold text-blue-950 px-10 md:px-16 py-4 md:py-6 rounded-full font-bold text-lg md:text-xl shadow-2xl">
+      🌸 ចុចទីនេះសម្រាប់ផ្កា 🌸
+    </button>
+    
+    <div class="mt-16 md:mt-20 flex flex-col items-center space-y-2">
+      <p class="love-font text-base md:text-lg italic gold-text">ពីប្តីដែលស្រឡាញ់អ្នកបំផុត 💍</p>
+      <p class="text-[10px] text-blue-400 uppercase tracking-widest opacity-40">Christmas 2024 • Built with Love</p>
     </div>
-  </div>
+  </section>
 
+</section>
 
-  <!-- JAVASCRIPT (State Management) -->
-  <script>
-    // State Constants
-    const SECTIONS = {
-      ROLE: 'roleSelection',
-      ADMIN: 'adminLogin',
-      USER: 'userLogin',
-    };
+<script>
+ const flowers = ["🌸", "🌹", "🌷", "🌻", "🌺", "🌼", "💐", "💮", "🏵️"];
 
-    function hideAll() {
-      Object.values(SECTIONS).forEach(id => {
-        document.getElementById(id).classList.add('hidden-section');
+    const subtitles = [
+      "✨ អូនគឺជាមន្តអាគមក្នុងជីវិតបង",
+      "🎄 សូមជូនពរ Christmas ដ៏កក់ក្ដៅ អូនស្រី",
+      "🌸 ផ្កាមួយសម្រាប់រាល់ពេលបងគិតពីអូន",
+      "💝 បេះដូងបងរីកចម្រើនព្រោះមានអូន",
+      "🌟 អូនគឺជាអំណោយអស់កាល",
+      "❤️ ស្នេហានេះ បងផ្តល់អោយអូនតែម្នាក់",
+      "🌹 អូនធ្វើអោយពិភពលោកបងស្រស់ស្អាត",
+      "🎶 រាល់ចម្រៀង គឺនិយាយអំពីអូន",
+      "💫 អូនគឺជាក្តីសុបិន្តដែលក្លាយជាការពិត",
+      "👩‍❤️‍👨 បងនឹងនៅជាមួយអូនគ្រប់រដូវ"
+    ];
+  
+  let sIndex = 0;
+  function showSubtitle() {
+    const el = document.getElementById("subtitle");
+    el.textContent = subtitles[sIndex];
+    el.classList.add("opacity-100", "translate-y-4");
+    setTimeout(() => {
+        el.classList.remove("opacity-100", "translate-y-4");
+    }, 2500);
+    sIndex = (sIndex + 1) % subtitles.length;
+  }
+
+  function createFlowerBurst(x, y, count = 20) {
+    // For touch devices, ensure coordinates are handled
+    const touchX = x || innerWidth / 2;
+    const touchY = y || innerHeight / 2;
+
+    for (let i = 0; i < count; i++) {
+      const flower = document.createElement("div");
+      flower.className = "flower";
+      flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+      
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = 200 + Math.random() * 400;
+      const tx = Math.cos(angle) * velocity;
+      const ty = Math.sin(angle) * velocity;
+      const tr = Math.random() * 720;
+      
+      flower.style.left = touchX + "px";
+      flower.style.top = touchY + "px";
+      flower.style.setProperty("--tx", `${tx}px`);
+      flower.style.setProperty("--ty", `${ty}px`);
+      flower.style.setProperty("--tr", `${tr}deg`);
+      
+      document.body.appendChild(flower);
+      setTimeout(() => flower.remove(), 2500);
+    }
+  }
+
+  function openGift(e) {
+    const x = e.clientX || (e.touches && e.touches[0].clientX);
+    const y = e.clientY || (e.touches && e.touches[0].clientY);
+    createFlowerBurst(x, y, 30);
+    
+    document.getElementById('landing').classList.add("hidden");
+    document.getElementById('content').classList.remove("hidden");
+    
+    // Attempt audio play (might need user interaction on mobile)
+    const audio = document.getElementById('bgMusic');
+    audio.play().catch(() => console.log("Audio playback delayed until interaction"));
+    
+    confetti({ 
+        particleCount: 100, 
+        spread: 60, 
+        origin: { y: 0.6 },
+        colors: ['#ff85a2', '#fbb6ce', '#ffffff', '#bf953f'] 
+    });
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setInterval(showSubtitle, 4500);
+    showSubtitle();
+  }
+
+  function finalSurprise(e) {
+    const x = e.clientX || (e.touches && e.touches[0].clientX);
+    const y = e.clientY || (e.touches && e.touches[0].clientY);
+    createFlowerBurst(x, y, 40);
+    
+    const duration = 2 * 1000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 45,
+        origin: { x: 0 },
+        colors: ['#ff85a2', '#ffffff']
       });
-    }
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 45,
+        origin: { x: 1 },
+        colors: ['#ff85a2', '#ffffff']
+      });
 
-    function showRoleSelection() {
-      hideAll();
-      document.getElementById(SECTIONS.ROLE).classList.remove('hidden-section');
-    }
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }());
+    
+    showSubtitle();
+  }
 
-    function showAdminLogin() {
-      hideAll();
-      document.getElementById(SECTIONS.ADMIN).classList.remove('hidden-section');
-    }
+  const c = document.getElementById("snow"), ctx = c.getContext("2d");
+  function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
 
-    function showUserLogin() {
-      hideAll();
-      document.getElementById(SECTIONS.USER).classList.remove('hidden-section');
-    }
-  </script>
+  const flakes = Array.from({length: 60},()=>({
+    x:Math.random()*c.width, y:Math.random()*c.height,
+    r:Math.random()*1.5+0.5, d:Math.random()*0.4+0.2
+  }));
+
+  function snow(){
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle="rgba(255,255,255,0.4)";
+    ctx.beginPath();
+    flakes.forEach(f=>{
+      ctx.moveTo(f.x,f.y);
+      ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+      f.y+=f.d; f.x += Math.sin(f.y/50)*0.2;
+      if(f.y>c.height){f.y=-10;f.x=Math.random()*c.width;}
+    });
+    ctx.fill(); requestAnimationFrame(snow);
+  }
+  snow();
+</script>
 
 </body>
-
 </html>
