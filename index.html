@@ -9,42 +9,50 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+Khmer:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+Khmer:wght@300;400;700&family=Playfair+Display:italic,wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    body { font-family: 'Noto Sans Khmer', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { 
+      font-family: 'Noto Sans Khmer', sans-serif; 
+      -webkit-tap-highlight-color: transparent; 
+      background-color: #011612; /* Deep Emerald */
+    }
+    
     .gold-text { 
-      background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+      background: linear-gradient(to right, #d4af37, #f7ef8a, #d4af37, #f7ef8a);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     }
-    .fancy-font { font-family: 'Cinzel', serif; }
 
-    /* Glassmorphism */
+    .fancy-font { font-family: 'Cinzel', serif; }
+    .italic-font { font-family: 'Playfair Display', serif; font-style: italic; }
+
+    /* Luxury Glassmorphism */
     .glass {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
     }
 
     /* Floating Animation */
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(1deg); }
     }
-    .float { animation: float 5s ease-in-out infinite; }
+    .float { animation: float 6s ease-in-out infinite; }
 
     /* Flower Animation */
     .flower {
       position: fixed;
       pointer-events: none;
       z-index: 100;
-      animation: flowerBurst 2.5s ease-out forwards;
-      font-size: 1.5rem;
+      animation: flowerBurst 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      font-size: 1.8rem;
     }
 
     @keyframes flowerBurst {
@@ -52,8 +60,9 @@
         transform: translate(-50%, -50%) scale(0) rotate(0deg);
         opacity: 1;
       }
+      20% { opacity: 1; }
       100% {
-        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.2) rotate(var(--tr));
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.3) rotate(var(--tr));
         opacity: 0;
       }
     }
@@ -61,56 +70,81 @@
     /* Snow Canvas */
     canvas#snow { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 50; }
 
-    /* Custom Button Glow */
-    .btn-gold {
-      background: linear-gradient(45deg, #b38728, #fbf5b7);
-      transition: all 0.3s ease;
-      box-shadow: 0 0 15px rgba(179, 135, 40, 0.4);
+    /* Luxury Button */
+    .btn-luxury {
+      background: linear-gradient(135deg, #d4af37 0%, #aa8b2b 100%);
+      color: #011612;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.2);
     }
-    .btn-gold:active {
-      transform: scale(0.95);
+    .btn-luxury:active { transform: scale(0.92); }
+    .btn-luxury::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(45deg);
+      transition: 0.5s;
+      pointer-events: none;
     }
+    .btn-luxury:hover::after { left: 100%; }
 
     .caption-glow {
-      text-shadow: 0 0 8px rgba(191, 149, 63, 0.5);
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
     }
 
-    /* Mobile specific adjustment to prevent horizontal scroll */
     html, body {
       max-width: 100%;
       overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Section divider */
+    .divider {
+      height: 2px;
+      background: linear-gradient(to right, transparent, #d4af37, transparent);
+      width: 80%;
+      margin: 2rem auto;
+      opacity: 0.3;
     }
   </style>
 </head>
 
-<body class="bg-[#020617] text-slate-100">
+<body class="text-slate-100">
 
 <canvas id="snow"></canvas>
 
 <!-- 💬 Subtitle -->
 <div id="subtitle"
-  class="fixed top-6 md:top-10 left-1/2 -translate-x-1/2
-         glass px-6 md:px-8 py-2 md:py-3 rounded-full
+  class="fixed top-6 left-1/2 -translate-x-1/2
+         glass px-6 py-3 rounded-full
          text-sm md:text-lg font-medium text-white
-         opacity-0 transition-all duration-500 z-[9999] text-center w-[85%] md:w-auto">
+         opacity-0 transition-all duration-500 z-[9999] text-center w-[90%] md:w-auto border-gold-text">
 </div>
 
 <!-- 🎁 Landing Section -->
-<section id="landing" class="min-h-screen flex flex-col items-center justify-center text-center px-4 md:px-6 relative overflow-hidden">
-  <div class="absolute w-64 h-64 md:w-96 md:h-96 bg-blue-500/10 rounded-full blur-[80px] md:blur-[120px] -top-20 -left-20"></div>
+<section id="landing" class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden bg-gradient-to-b from-[#01201a] to-[#011612]">
+  <div class="absolute w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] -top-40 -right-40"></div>
+  <div class="absolute w-[400px] h-[400px] bg-gold-500/5 rounded-full blur-[100px] -bottom-20 -left-20"></div>
   
-  <h1 class="fancy-font text-4xl sm:text-5xl md:text-7xl mb-4 md:mb-6 gold-text font-bold float px-2">
-    Merry Christmas <br>
-    <span class="text-white text-3xl sm:text-4xl md:text-5xl">ស្នេហារបស់ខ្ញុំ</span>
-  </h1>
-  <p class="text-sm md:text-xl text-blue-200/80 mb-8 md:mb-10 tracking-[0.2em] md:tracking-widest uppercase">
-    🌸 A Garden of Love 🌸
-  </p>
-  <button onclick="openGift(event)"
-    class="btn-gold text-blue-950 px-8 md:px-12 py-4 md:py-5 rounded-full font-bold text-base md:text-lg uppercase tracking-wider">
-    🎁 បើកអំណោយផ្កា
-  </button>
-  <p class="mt-6 text-xs md:text-sm text-gray-400 italic px-4">"អំណោយដែលចេញពីបេះដូង សម្រាប់មនុស្សដែលសំខាន់បំផុត"</p>
+  <div class="z-10">
+    <div class="mb-4 text-4xl opacity-80">🎄</div>
+    <h1 class="fancy-font text-5xl sm:text-6xl md:text-8xl mb-6 gold-text font-bold float">
+      Merry <br class="sm:hidden"> Christmas <br>
+      <span class="text-white text-3xl sm:text-4xl md:text-6xl tracking-tight mt-2 block">ស្នេហារបស់បង</span>
+    </h1>
+    <p class="italic-font text-lg md:text-2xl text-emerald-100/60 mb-12 tracking-widest uppercase">
+      ✧ A Garden of Purest Love ✧
+    </p>
+    <button onclick="openGift(event)"
+      class="btn-luxury px-10 md:px-16 py-5 md:py-6 rounded-full font-bold text-lg md:text-xl uppercase tracking-widest">
+      🎁 បើកអំណោយផ្កា
+    </button>
+    <p class="mt-8 text-xs md:text-sm text-emerald-400/40 italic">"អំណោយដែលចេញពីបេះដូង សម្រាប់មនុស្សដែលសំខាន់បំផុត"</p>
+  </div>
 </section>
 
 <!-- ❤️ Content Section -->
@@ -121,93 +155,111 @@
   </audio>
 
   <!-- 💌 Letter -->
-  <section class="min-h-[80vh] md:min-h-screen flex flex-col items-center justify-center px-4 md:px-6 py-12 md:py-20 bg-gradient-to-b from-[#020617] to-[#0f172a]">
-    <div class="w-full max-w-3xl glass p-8 md:p-16 rounded-[30px] md:rounded-[40px] text-center border-t-white/20">
-      <h2 class="fancy-font text-2xl md:text-4xl mb-3 md:mb-4 gold-text uppercase">To My Sweetheart 💖</h2>
-      <p class="text-[10px] md:text-sm text-gold-200 mb-6 md:mb-8 uppercase tracking-[0.2em] font-bold opacity-70">— សំបុត្រស្នេហ៍ផ្ញើជូនអូន —</p>
-      <p class="text-base md:text-xl text-blue-50 leading-relaxed md:leading-loose font-light">
-        Christmas នេះ ខ្ញុំចង់ជូនផ្កាដែលស្អាតបំផុតដល់អ្នក។ <br>
-        តែគ្មានផ្កាណាស្អាតជាងស្នាមញញឹមរបស់អ្នកឡើយ។ <br class="hidden md:block">
-        អរគុណដែលធ្វើឱ្យពិភពលោករបស់ខ្ញុំស្រស់បំព្រង។ <br>
-        <span class="text-xl md:text-2xl mt-4 block font-bold text-pink-400">ស្រឡាញ់អ្នកជានិច្ច ❤️</span>
+  <section class="min-h-screen flex flex-col items-center justify-center px-4 py-20 bg-[#011612]">
+    <div class="w-full max-w-4xl glass p-8 md:p-20 rounded-[40px] text-center relative">
+      <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-5xl">💌</div>
+      
+      <h2 class="fancy-font text-3xl md:text-5xl mb-4 gold-text">To My Sweetheart 💖</h2>
+      <div class="divider"></div>
+      
+      <p class="text-xs md:text-sm text-gold-200/60 mb-10 uppercase tracking-[0.3em] font-bold">— សំបុត្រស្នេហ៍ផ្ញើជូនអូន —</p>
+      
+      <p class="text-lg md:text-2xl text-emerald-50 leading-relaxed md:leading-loose font-light italic-font">
+        Christmas នេះ ខ្ញុំចង់ជូនផ្កាដែលស្អាតបំផុតដល់ប្រពន្ធសម្លាញ់។ <br>
+        តែគ្មានផ្កាណាស្អាតជាងស្នាមញញឹមរបស់អូនឡើយ។ <br>
+        អរគុណដែលធ្វើឱ្យពិភពលោករបស់បងស្រស់បំព្រង។ <br>
+        <span class="text-2xl md:text-4xl mt-8 block font-bold gold-text">ស្រឡាញ់អូនជានិច្ច ❤️</span>
       </p>
     </div>
-    <p class="mt-6 md:mt-8 text-blue-300/60 italic text-center text-xs md:text-base px-6">"រៀងរាល់ឆ្នាំ រៀងរាល់ថ្ងៃ បេះដូងបងនៅតែមានតែអូនម្នាក់"</p>
+    <p class="mt-12 text-emerald-300/40 italic text-center text-sm md:text-lg">"រៀងរាល់ឆ្នាំ រៀងរាល់ថ្ងៃ បេះដូងបងនៅតែមានតែអូនម្នាក់"</p>
   </section>
 
   <!-- 📸 Gallery -->
-  <section class="py-16 md:py-24 bg-[#0f172a]">
-    <div class="text-center mb-10 md:mb-16 px-4">
-      <h2 class="fancy-font text-3xl md:text-4xl gold-text mb-2">Our Magical Moments</h2>
-      <p class="text-sm md:text-base text-blue-300/70 font-light italic">"ការចងចាំដែលមិនអាចបំភ្លេចបានរវាងយើងទាំងពីរ"</p>
+  <section class="py-24 bg-gradient-to-b from-[#011612] to-[#000a08]">
+    <div class="text-center mb-20 px-4">
+      <h2 class="fancy-font text-4xl md:text-5xl gold-text mb-4">Our Magical Moments</h2>
+      <p class="italic-font text-emerald-300/50 text-lg">"ការចងចាំដែលមិនអាចបំភ្លេចបានរវាងយើងទាំងពីរ"</p>
+      <div class="divider w-24"></div>
     </div>
     
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-10 px-4 md:px-6 max-w-6xl mx-auto">
-      <!-- Image 1 -->
-      <div class="glass p-3 md:p-4 rounded-2xl transform hover:scale-105 transition duration-500">
-        <div class="aspect-square overflow-hidden rounded-xl mb-3 md:mb-4">
-          <img src="https://images.unsplash.com/photo-1516589174184-c6858b16ecb0?q=80&w=400" class="w-full h-full object-cover" alt="love">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 px-6 max-w-7xl mx-auto">
+      <!-- Item 1 -->
+      <div class="group">
+        <div class="glass p-4 rounded-3xl transform group-hover:-translate-y-4 transition-all duration-700">
+          <div class="aspect-[4/5] overflow-hidden rounded-2xl mb-6 relative">
+            <img src="/images/1.jpg" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700" alt="love">
+            <div class="absolute inset-0 bg-emerald-900/10 group-hover:bg-transparent transition-colors"></div>
+          </div>
+          <h3 class="text-gold-200 font-bold text-lg md:text-xl mb-2 caption-glow fancy-font">The Start of Us</h3>
+          <p class="text-sm text-emerald-100/60 italic font-light">"ថ្ងៃដែលបេះដូងបងចាប់ផ្ដើមលោតដើម្បីអូន"</p>
         </div>
-        <h3 class="text-gold-200 font-bold text-sm md:text-base mb-1 caption-glow">The Start of Us</h3>
-        <p class="text-xs md:text-sm text-blue-200 italic font-light">"ថ្ងៃដែលបេះដូងបងចាប់ផ្ដើមលោតដើម្បីអូន"</p>
       </div>
-      <!-- Image 2 -->
-      <div class="glass p-3 md:p-4 rounded-2xl transform hover:scale-105 transition duration-500 md:translate-y-12">
-        <div class="aspect-square overflow-hidden rounded-xl mb-3 md:mb-4">
-          <img src="https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=400" class="w-full h-full object-cover" alt="love">
+
+      <!-- Item 2 (Video) -->
+      <div class="group md:mt-12">
+        <div class="glass p-4 rounded-3xl transform group-hover:-translate-y-4 transition-all duration-700">
+          <div class="aspect-[4/5] overflow-hidden rounded-2xl mb-6 relative">
+            <video src="/images/2.mp4" class="w-full h-full object-cover" loop muted playsinline autoplay></video>
+            <div class="absolute inset-0 bg-emerald-900/10 group-hover:bg-transparent transition-colors"></div>
+          </div>
+          <h3 class="text-gold-200 font-bold text-lg md:text-xl mb-2 caption-glow fancy-font">Pure Happiness</h3>
+          <p class="text-sm text-emerald-100/60 italic font-light">"ស្នាមញញឹមរបស់អូន គឺជាកម្លាំងចិត្តរបស់បង"</p>
         </div>
-        <h3 class="text-gold-200 font-bold text-sm md:text-base mb-1 caption-glow">Pure Happiness</h3>
-        <p class="text-xs md:text-sm text-blue-200 italic font-light">"ស្នាមញញឹមរបស់អូន គឺជាកម្លាំងចិត្តរបស់បង"</p>
       </div>
-      <!-- Image 3 -->
-      <div class="glass p-3 md:p-4 rounded-2xl transform hover:scale-105 transition duration-500">
-        <div class="aspect-square overflow-hidden rounded-xl mb-3 md:mb-4">
-          <img src="https://images.unsplash.com/photo-1522673607200-164883212c2f?q=80&w=400" class="w-full h-full object-cover" alt="love">
+
+      <!-- Item 3 -->
+      <div class="group">
+        <div class="glass p-4 rounded-3xl transform group-hover:-translate-y-4 transition-all duration-700">
+          <div class="aspect-[4/5] overflow-hidden rounded-2xl mb-6 relative">
+            <img src="/images/3.jpg" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700" alt="love">
+            <div class="absolute inset-0 bg-emerald-900/10 group-hover:bg-transparent transition-colors"></div>
+          </div>
+          <h3 class="text-gold-200 font-bold text-lg md:text-xl mb-2 caption-glow fancy-font">Forever & Always</h3>
+          <p class="text-sm text-emerald-100/60 italic font-light">"យើងនឹងដើរកាន់ដៃគ្នា រហូតដល់ថ្ងៃអវសាន"</p>
         </div>
-        <h3 class="text-gold-200 font-bold text-sm md:text-base mb-1 caption-glow">Forever & Always</h3>
-        <p class="text-xs md:text-sm text-blue-200 italic font-light">"យើងនឹងដើរកាន់ដៃគ្នា រហូតដល់ថ្ងៃអវសាន"</p>
       </div>
     </div>
   </section>
 
   <!-- 🎁 Final Surprise -->
-  <section class="min-h-screen flex flex-col items-center justify-center text-center bg-[#020617] px-6 relative">
-    <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
-      <div class="absolute top-10 left-10 text-6xl md:text-8xl">🎄</div>
-      <div class="absolute bottom-10 right-10 text-6xl md:text-8xl">🎁</div>
-    </div>
+  <section class="min-h-screen flex flex-col items-center justify-center text-center bg-[#000a08] px-6 relative overflow-hidden">
+    <!-- Ambient backgrounds -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(212,175,55,0.05)_0%,_transparent_70%)]"></div>
 
-    <h2 class="fancy-font text-3xl md:text-5xl mb-4 gold-text">A Thousand Flowers</h2>
-    <p class="mb-10 md:mb-12 text-blue-200/60 text-sm md:text-base italic px-4">"ព្រោះអូនគឺជាផ្កាដែលស្រស់ស្អាតបំផុតក្នុងជីវិតបង"</p>
-    
-    <button onclick="finalSurprise(event)"
-      class="btn-gold text-blue-950 px-10 md:px-16 py-4 md:py-6 rounded-full font-bold text-lg md:text-xl shadow-2xl">
-      🌸 ចុចទីនេះសម្រាប់ផ្កា 🌸
-    </button>
-    
-    <div class="mt-16 md:mt-20 flex flex-col items-center space-y-2">
-      <p class="love-font text-base md:text-lg italic gold-text">ពីប្តីដែលស្រឡាញ់អ្នកបំផុត 💍</p>
-      <p class="text-[10px] text-blue-400 uppercase tracking-widest opacity-40">Christmas 2024 • Built with Love</p>
+    <div class="z-10 max-w-2xl">
+      <h2 class="fancy-font text-4xl md:text-6xl mb-6 gold-text">A Thousand Flowers</h2>
+      <p class="mb-12 text-emerald-100/50 text-lg md:text-xl italic-font">"ព្រោះអូនគឺជាផ្កាដែលស្រស់ស្អាតបំផុតក្នុងជីវិតបង"</p>
+      
+      <button onclick="finalSurprise(event)"
+        class="btn-luxury px-12 md:px-20 py-6 md:py-8 rounded-full font-bold text-xl md:text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        🌸 ចុចទីនេះសម្រាប់ផ្កា 🌸
+      </button>
+      
+      <div class="mt-24 flex flex-col items-center space-y-4">
+        <div class="divider w-48 opacity-20"></div>
+        <p class="italic-font text-xl md:text-2xl gold-text">ពីប្តីដែលស្រឡាញ់អូនបំផុត 💍</p>
+        <p class="text-[10px] text-emerald-500 uppercase tracking-[0.5em] opacity-30">Christmas MMXXIV • Eternal Love</p>
+      </div>
     </div>
   </section>
 
 </section>
 
 <script>
- const flowers = ["🌸", "🌹", "🌷", "🌻", "🌺", "🌼", "💐", "💮", "🏵️"];
+  const flowers = ["🌸", "🌹", "🌷", "🌻", "🌺", "🌼", "💐", "💮", "🏵️"];
 
-    const subtitles = [
-      "✨ អូនគឺជាមន្តអាគមក្នុងជីវិតបង",
-      "🎄 សូមជូនពរ Christmas ដ៏កក់ក្ដៅ អូនស្រី",
-      "🌸 ផ្កាមួយសម្រាប់រាល់ពេលបងគិតពីអូន",
-      "💝 បេះដូងបងរីកចម្រើនព្រោះមានអូន",
-      "🌟 អូនគឺជាអំណោយអស់កាល",
-      "❤️ ស្នេហានេះ បងផ្តល់អោយអូនតែម្នាក់",
-      "🌹 អូនធ្វើអោយពិភពលោកបងស្រស់ស្អាត",
-      "🎶 រាល់ចម្រៀង គឺនិយាយអំពីអូន",
-      "💫 អូនគឺជាក្តីសុបិន្តដែលក្លាយជាការពិត",
-      "👩‍❤️‍👨 បងនឹងនៅជាមួយអូនគ្រប់រដូវ"
-    ];
+  const subtitles = [
+    "✨ អូនគឺជាមន្តអាគមក្នុងជីវិតបង",
+    "🎄 សូមជូនពរ Christmas ដ៏កក់ក្ដៅ អូនស្រី",
+    "🌸 ផ្កាមួយសម្រាប់រាល់ពេលបងគិតពីអូន",
+    "💝 បេះដូងបងរីកចម្រើនព្រោះមានអូន",
+    "🌟 អូនគឺជាអំណោយអស់កាល",
+    "❤️ ស្នេហានេះ បងផ្តល់អោយអូនតែម្នាក់",
+    "🌹 អូនធ្វើអោយពិភពលោកបងស្រស់ស្អាត",
+    "🎶 រាល់ចម្រៀង គឺនិយាយអំពីអូន",
+    "💫 អូនគឺជាក្តីសុបិន្តដែលក្លាយជាការពិត",
+    "👩‍❤️‍👨 បងនឹងនៅជាមួយអូនគ្រប់រដូវ"
+  ];
   
   let sIndex = 0;
   function showSubtitle() {
@@ -216,12 +268,11 @@
     el.classList.add("opacity-100", "translate-y-4");
     setTimeout(() => {
         el.classList.remove("opacity-100", "translate-y-4");
-    }, 2500);
+    }, 2800);
     sIndex = (sIndex + 1) % subtitles.length;
   }
 
-  function createFlowerBurst(x, y, count = 20) {
-    // For touch devices, ensure coordinates are handled
+  function createFlowerBurst(x, y, count = 25) {
     const touchX = x || innerWidth / 2;
     const touchY = y || innerHeight / 2;
 
@@ -231,10 +282,10 @@
       flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
       
       const angle = Math.random() * Math.PI * 2;
-      const velocity = 200 + Math.random() * 400;
+      const velocity = 150 + Math.random() * 450;
       const tx = Math.cos(angle) * velocity;
       const ty = Math.sin(angle) * velocity;
-      const tr = Math.random() * 720;
+      const tr = (Math.random() - 0.5) * 1000;
       
       flower.style.left = touchX + "px";
       flower.style.top = touchY + "px";
@@ -250,49 +301,52 @@
   function openGift(e) {
     const x = e.clientX || (e.touches && e.touches[0].clientX);
     const y = e.clientY || (e.touches && e.touches[0].clientY);
-    createFlowerBurst(x, y, 30);
+    createFlowerBurst(x, y, 35);
     
-    document.getElementById('landing').classList.add("hidden");
-    document.getElementById('content').classList.remove("hidden");
-    
-    // Attempt audio play (might need user interaction on mobile)
-    const audio = document.getElementById('bgMusic');
-    audio.play().catch(() => console.log("Audio playback delayed until interaction"));
-    
-    confetti({ 
-        particleCount: 100, 
-        spread: 60, 
-        origin: { y: 0.6 },
-        colors: ['#ff85a2', '#fbb6ce', '#ffffff', '#bf953f'] 
-    });
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setInterval(showSubtitle, 4500);
-    showSubtitle();
+    document.getElementById('landing').classList.add("opacity-0");
+    setTimeout(() => {
+      document.getElementById('landing').classList.add("hidden");
+      document.getElementById('content').classList.remove("hidden");
+      
+      // Attempt audio
+      const audio = document.getElementById('bgMusic');
+      audio.volume = 0.5;
+      audio.play().catch(() => {});
+      
+      confetti({ 
+        particleCount: 150, 
+        spread: 80, 
+        origin: { y: 0.7 },
+        colors: ['#d4af37', '#f7ef8a', '#ffffff', '#065f46'] 
+      });
+      
+      setInterval(showSubtitle, 4800);
+      showSubtitle();
+    }, 500);
   }
 
   function finalSurprise(e) {
     const x = e.clientX || (e.touches && e.touches[0].clientX);
     const y = e.clientY || (e.touches && e.touches[0].clientY);
-    createFlowerBurst(x, y, 40);
+    createFlowerBurst(x, y, 50);
     
-    const duration = 2 * 1000;
+    const duration = 4 * 1000;
     const end = Date.now() + duration;
 
     (function frame() {
       confetti({
-        particleCount: 2,
+        particleCount: 3,
         angle: 60,
-        spread: 45,
+        spread: 55,
         origin: { x: 0 },
-        colors: ['#ff85a2', '#ffffff']
+        colors: ['#d4af37', '#ffffff']
       });
       confetti({
-        particleCount: 2,
+        particleCount: 3,
         angle: 120,
-        spread: 45,
+        spread: 55,
         origin: { x: 1 },
-        colors: ['#ff85a2', '#ffffff']
+        colors: ['#d4af37', '#ffffff']
       });
 
       if (Date.now() < end) {
@@ -307,19 +361,19 @@
   function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
   window.addEventListener('resize', resize); resize();
 
-  const flakes = Array.from({length: 60},()=>({
+  const flakes = Array.from({length: 70},()=>({
     x:Math.random()*c.width, y:Math.random()*c.height,
-    r:Math.random()*1.5+0.5, d:Math.random()*0.4+0.2
+    r:Math.random()*1.8+0.4, d:Math.random()*0.5+0.2
   }));
 
   function snow(){
     ctx.clearRect(0,0,c.width,c.height);
-    ctx.fillStyle="rgba(255,255,255,0.4)";
+    ctx.fillStyle="rgba(212,175,55,0.3)"; // Gold-tinted snow
     ctx.beginPath();
     flakes.forEach(f=>{
       ctx.moveTo(f.x,f.y);
       ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
-      f.y+=f.d; f.x += Math.sin(f.y/50)*0.2;
+      f.y+=f.d; f.x += Math.sin(f.y/60)*0.3;
       if(f.y>c.height){f.y=-10;f.x=Math.random()*c.width;}
     });
     ctx.fill(); requestAnimationFrame(snow);
